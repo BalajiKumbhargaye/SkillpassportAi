@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types';
+import type { LucideIcon } from 'lucide-react';
 import {
   Compass,
   Briefcase,
@@ -15,12 +16,10 @@ import {
   LogOut,
   ChevronDown,
   Sparkles,
-  Shield,
   Layers,
   Database,
   Menu,
   X,
-  UserCheck,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '@/lib/supabase';
 
@@ -31,7 +30,7 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const hasSupabase = isSupabaseConfigured();
 
-  const roleLabels: Record<UserRole, { label: string; icon: any; color: string; badge: string }> = {
+  const roleLabels: Record<UserRole, { label: string; icon: LucideIcon; color: string; badge: string }> = {
     student: {
       label: 'Student',
       icon: GraduationCap,

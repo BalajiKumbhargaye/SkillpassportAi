@@ -13,15 +13,16 @@ import {
   GraduationCap,
   Sparkles,
   BookOpen,
-  ArrowRight,
   TrendingUp,
   Award,
   Layers,
   Send,
-  Building2,
   ExternalLink,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+
+const createApplicationId = () =>
+  `app-${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`}`;
 
 interface SkillGapModalProps {
   job: JobOpening;
@@ -48,10 +49,15 @@ export const SkillGapModal: React.FC<SkillGapModalProps> = ({
   const analysis: SkillGapAnalysis = analyzeSkillGap(student, job, courses);
 
   const handleApply = () => {
+    if (analysis.overallScore < 70) {
+      alert('This role is not a strong fit yet. Improve your weaker skill areas and re-run the analysis before applying.');
+      return;
+    }
+
     setApplying(true);
     try {
       db.createApplication({
-        id: `app-${Date.now()}`,
+        id: createApplicationId(),
         jobId: job.id,
         studentId: student.userId,
         studentName: student.fullName,
@@ -79,19 +85,13 @@ export const SkillGapModal: React.FC<SkillGapModalProps> = ({
         origin: { y: 0.6 },
       });
       if (onApplied) onApplied();
-    } catch (err: any) {
-      alert(err.message || 'Error submitting application');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error submitting application';
+      alert(message);
     } finally {
       setApplying(false);
     }
   };
-
-  const scoreColor =
-    analysis.overallScore >= 80
-      ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
-      : analysis.overallScore >= 60
-      ? 'text-blue-400 border-blue-500/30 bg-blue-500/10'
-      : 'text-amber-400 border-amber-500/30 bg-amber-500/10';
 
   const scoreBadge =
     analysis.overallScore >= 80

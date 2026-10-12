@@ -33,6 +33,15 @@ export interface StudentCertification {
   credentialUrl?: string;
 }
 
+export interface ResumeEvidenceSummary {
+  lastUpdatedAt: string;
+  evidenceScore: number;
+  verifiedClaims: string[];
+  missingClaims: string[];
+  evidenceSources: string[];
+  notes: string[];
+}
+
 export interface StudentProfile {
   id: string;
   userId: string;
@@ -49,6 +58,7 @@ export interface StudentProfile {
   certifications: StudentCertification[];
   careerInterests: string[];
   resumeUrl?: string;
+  resumeEvidence?: ResumeEvidenceSummary;
   bio?: string;
 }
 

@@ -22,46 +22,63 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const CURRENT_USER_KEY = 'skillpassport_current_user_session';
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+const getInitialSession = () => {
+  if (typeof window === 'undefined') {
+    const fallback = INITIAL_USERS.find((u) => u.role === 'student') || INITIAL_USERS[0];
+    return {
+      user: fallback,
+      studentProfile: db.getStudentByUserId(fallback.id) || null,
+    };
+  }
 
-  // Load session from storage or default to demo student
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(CURRENT_USER_KEY);
-      if (stored) {
-        const parsedUser: User = JSON.parse(stored);
-        const liveUser = db.getUserById(parsedUser.id) || parsedUser;
-        setUser(liveUser);
-        if (liveUser.role === 'student') {
-          const profile = db.getStudentByUserId(liveUser.id);
-          setStudentProfile(profile || null);
-        }
-      } else {
-        // Default to demo student on first load
-        const defaultStudent = INITIAL_USERS.find((u) => u.role === 'student') || INITIAL_USERS[0];
-        setUser(defaultStudent);
-        const profile = db.getStudentByUserId(defaultStudent.id);
-        setStudentProfile(profile || null);
-        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(defaultStudent));
-      }
-    } catch (err) {
-      console.error('Failed to restore session:', err);
-      const fallback = INITIAL_USERS[0];
-      setUser(fallback);
-    } finally {
-      setIsLoading(false);
+  try {
+    const stored = localStorage.getItem(CURRENT_USER_KEY);
+    if (stored) {
+      const parsedUser: User = JSON.parse(stored);
+      const liveUser = db.getUserById(parsedUser.id) || parsedUser;
+      return {
+        user: liveUser,
+        studentProfile: liveUser.role === 'student' ? db.getStudentByUserId(liveUser.id) || null : null,
+      };
     }
 
-    // Listen to db update events across components
-    const handleDbUpdate = () => {
-      refreshUserData();
+    const defaultStudent = INITIAL_USERS.find((u) => u.role === 'student') || INITIAL_USERS[0];
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(defaultStudent));
+    return {
+      user: defaultStudent,
+      studentProfile: db.getStudentByUserId(defaultStudent.id) || null,
     };
+  } catch (err) {
+    console.error('Failed to restore session:', err);
+    const fallback = INITIAL_USERS[0];
+    return {
+      user: fallback,
+      studentProfile: db.getStudentByUserId(fallback.id) || null,
+    };
+  }
+};
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const initialSession = getInitialSession();
+  const [user, setUser] = useState<User | null>(initialSession.user);
+  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(initialSession.studentProfile);
+  const [isLoading] = useState(false);
+
+  useEffect(() => {
+    const handleDbUpdate = () => {
+      if (!user) return;
+      const freshUser = db.getUserById(user.id);
+      if (freshUser) {
+        setUser(freshUser);
+        if (freshUser.role === 'student') {
+          setStudentProfile(db.getStudentByUserId(freshUser.id) || null);
+        }
+      }
+    };
+
     window.addEventListener('skillpassport_data_updated', handleDbUpdate);
     return () => window.removeEventListener('skillpassport_data_updated', handleDbUpdate);
-  }, []);
+  }, [user]);
 
   const refreshUserData = () => {
     if (!user) return;

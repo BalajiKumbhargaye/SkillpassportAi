@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { JobOpening } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/db';
-import { X, Building2, Plus, Briefcase, IndianRupee, MapPin, Sparkles } from 'lucide-react';
+import { X, Plus, Briefcase } from 'lucide-react';
 
 interface CreateJobModalProps {
   isOpen: boolean;
@@ -138,7 +138,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               <label className="block text-slate-300 font-semibold mb-1">Job Type</label>
               <select
                 value={type}
-                onChange={(e) => setType(e.target.value as any)}
+                onChange={(e) => setType(e.target.value as JobOpening['type'])}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500"
               >
                 <option value="Full-time">Full-time</option>
@@ -150,7 +150,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               <label className="block text-slate-300 font-semibold mb-1">Workplace Mode</label>
               <select
                 value={workplaceType}
-                onChange={(e) => setWorkplaceType(e.target.value as any)}
+                onChange={(e) => setWorkplaceType(e.target.value as JobOpening['workplaceType'])}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-purple-500"
               >
                 <option value="Hybrid">Hybrid</option>

@@ -1,51 +1,104 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/db';
-import { JobOpening, JobApplication, Course } from '@/types';
+import { JobApplication } from '@/types';
 import { JobCard } from '@/components/JobCard';
 import { CourseCard } from '@/components/CourseCard';
 import { StudentProfileModal } from '@/components/StudentProfileModal';
+import { buildResumePassport, extractResumeText } from '@/lib/resume-parser';
 import {
   GraduationCap,
   Sparkles,
   Briefcase,
-  CheckCircle2,
   Clock,
   TrendingUp,
   Edit3,
   Calendar,
   Layers,
-  Award,
-  AlertCircle,
-  FolderGit2,
   BookOpen,
   ArrowRight,
   ShieldCheck,
+  Search,
+  FileText,
+  CheckCircle2,
+  AlertTriangle,
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function StudentDashboardPage() {
-  const { user, studentProfile, refreshUserData } = useAuth();
+  const { user, studentProfile, updateStudentProfile } = useAuth();
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [jobs, setJobs] = useState<JobOpening[]>([]);
-  const [applications, setApplications] = useState<JobApplication[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isParsingResume, setIsParsingResume] = useState(false);
+  const [resumeStatus, setResumeStatus] = useState('');
+  const [, setRefreshTick] = useState(0);
 
-  const loadData = () => {
-    setJobs(db.getJobs());
-    if (user) {
-      setApplications(db.getApplicationsByStudent(user.id));
+  const jobs = db.getJobs();
+  const applications = user ? db.getApplicationsByStudent(user.id) : [];
+  const courses = db.getCourses();
+  const handleRefresh = () => setRefreshTick((tick) => tick + 1);
+
+  const filteredJobs = jobs.filter((job) => {
+    const term = searchTerm.trim().toLowerCase();
+    if (!term) return true;
+    const jobText = [
+      job.title,
+      job.companyName,
+      job.description,
+      job.location,
+      job.requiredSkills.join(' '),
+      job.preferredSkills?.join(' ') ?? '',
+    ]
+      .join(' ')
+      .toLowerCase();
+    return jobText.includes(term);
+  });
+
+  const handleResumeUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !studentProfile) return;
+
+    try {
+      setIsParsingResume(true);
+      setResumeStatus('Analyzing resume and validating claims against evidence...');
+
+      const resumeText = await extractResumeText(file);
+      const passport = buildResumePassport(resumeText, studentProfile);
+
+      updateStudentProfile({
+        ...studentProfile,
+        skills: passport.skills,
+        projects: passport.projects,
+        certifications: passport.certifications,
+        careerInterests: passport.careerInterests,
+        bio: passport.bio,
+        resumeUrl: file.name,
+        resumeEvidence: passport.resumeEvidence,
+      });
+
+      setResumeStatus(
+        `Resume processed successfully. ${passport.resumeEvidence.verifiedClaims.length} skills verified with ${passport.resumeEvidence.evidenceScore}% evidence confidence.`
+      );
+      handleRefresh();
+    } catch (error) {
+      console.error('Resume upload failed:', error);
+      setResumeStatus('Unable to parse that resume. Please upload a PDF, DOCX, or text resume.');
+    } finally {
+      setIsParsingResume(false);
+      event.target.value = '';
     }
-    setCourses(db.getCourses());
   };
 
   useEffect(() => {
-    loadData();
-    window.addEventListener('skillpassport_data_updated', loadData);
-    return () => window.removeEventListener('skillpassport_data_updated', loadData);
-  }, [user]);
+    const handleDataUpdated = () => {
+      setRefreshTick((tick) => tick + 1);
+    };
+
+    window.addEventListener('skillpassport_data_updated', handleDataUpdated);
+    return () => window.removeEventListener('skillpassport_data_updated', handleDataUpdated);
+  }, []);
 
   if (!studentProfile) {
     return (
@@ -233,6 +286,61 @@ export default function StudentDashboardPage() {
         </div>
       </div>
 
+      {/* Resume Upload & Evidence Validation */}
+      <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <FileText className="w-4 h-4 text-emerald-400" />
+              Resume-to-SkillPassport Generator
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Upload a resume to auto-generate your skill passport by validating claims against projects, links, and certificates.
+            </p>
+          </div>
+
+          <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition-colors">
+            <input type="file" accept=".pdf,.doc,.docx,.txt" className="hidden" onChange={handleResumeUpload} />
+            {isParsingResume ? 'Analyzing...' : 'Upload Resume'}
+          </label>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
+            <p className="text-[11px] uppercase tracking-wider text-slate-400">Evidence Confidence</p>
+            <p className="mt-2 text-3xl font-black text-white">
+              {studentProfile.resumeEvidence?.evidenceScore ?? 82}
+              <span className="text-lg text-slate-500">%</span>
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
+            <p className="text-[11px] uppercase tracking-wider text-slate-400">Verified Claims</p>
+            <p className="mt-2 text-3xl font-black text-emerald-400">
+              {studentProfile.resumeEvidence?.verifiedClaims.length ?? studentProfile.skills.filter((s) => s.verified).length}
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
+            <p className="text-[11px] uppercase tracking-wider text-slate-400">Needs Evidence</p>
+            <p className="mt-2 text-3xl font-black text-amber-400">
+              {studentProfile.resumeEvidence?.missingClaims.length ?? 0}
+            </p>
+          </div>
+        </div>
+
+        {resumeStatus ? (
+          <div className="flex items-start gap-2 rounded-xl border border-slate-800 bg-slate-950/50 p-3 text-xs text-slate-300">
+            {resumeStatus.includes('successfully') ? (
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            ) : (
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            )}
+            <span>{resumeStatus}</span>
+          </div>
+        ) : null}
+      </div>
+
       {/* Tracked Applications Section */}
       <div className="rounded-2xl bg-slate-900/80 border border-slate-800 p-6 space-y-4">
         <div className="flex items-center justify-between">
@@ -318,22 +426,38 @@ export default function StudentDashboardPage() {
 
       {/* Recommended Jobs & Skill-Gap Analysis */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <h2 className="text-base font-bold text-white flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400" />
               Recommended Campus Openings with Live Skill Matching
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Click &quot;Skill-Gap Analysis&quot; on any role to see private matched, missing, and partial skill breakdowns.
+              Search roles like &quot;Java Developer&quot; or &quot;Data Engineer&quot; to compare them against your current SkillPassport.
             </p>
           </div>
+
+          <label className="relative block w-full max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Search jobs by role, skill, or company"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950/60 py-2.5 pl-9 pr-3 text-sm text-slate-200 placeholder:text-slate-500 focus:border-blue-500 focus:outline-none"
+            />
+          </label>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {jobs.slice(0, 6).map((job) => (
-            <JobCard key={job.id} job={job} onRefresh={loadData} />
-          ))}
+          {filteredJobs.length > 0 ? (
+            filteredJobs.slice(0, 6).map((job) => (
+              <JobCard key={job.id} job={job} onRefresh={handleRefresh} />
+            ))
+          ) : (
+            <div className="col-span-full rounded-2xl border border-dashed border-slate-700 bg-slate-950/40 p-8 text-center text-sm text-slate-400">
+              No jobs match your search. Try a broader role like &quot;Java&quot;, &quot;Data&quot;, or &quot;Frontend&quot;.
+            </div>
+          )}
         </div>
       </div>
 
@@ -369,7 +493,7 @@ export default function StudentDashboardPage() {
       <StudentProfileModal
         isOpen={profileModalOpen}
         onClose={() => setProfileModalOpen(false)}
-        onSaved={loadData}
+        onSaved={handleRefresh}
       />
     </div>
   );

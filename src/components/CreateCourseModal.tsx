@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Course } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/db';
-import { X, BookOpen, Plus, Award } from 'lucide-react';
+import { X, BookOpen, Plus } from 'lucide-react';
 
 interface CreateCourseModalProps {
   isOpen: boolean;
@@ -25,11 +25,9 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   const [skillsCovered, setSkillsCovered] = useState('Docker, Kubernetes, CI/CD');
   const [targetJobRoles, setTargetJobRoles] = useState('DevOps Engineer, Cloud Architect');
   const [durationWeeks, setDurationWeeks] = useState(4);
-  const [durationHours, setDurationHours] = useState(24);
   const [fee, setFee] = useState(0);
   const [isCertified, setIsCertified] = useState(true);
   const [level, setLevel] = useState<Course['level']>('Intermediate');
-  const [enrollUrl, setEnrollUrl] = useState('#enroll');
 
   if (!isOpen) return null;
 
@@ -55,11 +53,11 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
         .map((r) => r.trim())
         .filter(Boolean),
       durationWeeks,
-      durationHours,
+      durationHours: Math.max(1, durationWeeks * 6),
       fee,
       isCertified,
       level,
-      enrollUrl,
+      enrollUrl: '#enroll',
       rating: 4.9,
       reviewCount: 45,
       createdAt: new Date().toISOString(),
@@ -145,7 +143,7 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
               <label className="block text-slate-300 font-semibold mb-1">Difficulty Level</label>
               <select
                 value={level}
-                onChange={(e) => setLevel(e.target.value as any)}
+                onChange={(e) => setLevel(e.target.value as Course['level'])}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
               >
                 <option value="Beginner">Beginner</option>

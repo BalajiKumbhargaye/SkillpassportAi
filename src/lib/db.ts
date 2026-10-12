@@ -251,9 +251,6 @@ export const db = {
       .slice(0, 7);
 
     // Common skill gaps across all students
-    const studentKnownSkills = new Set(
-      students.flatMap((s) => s.skills.map((sk) => sk.name.toLowerCase()))
-    );
     const gapMap: Record<string, number> = {};
     jobs.forEach((j) => {
       j.requiredSkills.forEach((req) => {

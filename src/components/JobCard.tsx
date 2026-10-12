@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { JobOpening, StudentProfile } from '@/types';
+import { JobOpening } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { analyzeSkillGap } from '@/lib/skill-matcher';
 import { db } from '@/lib/db';
@@ -25,6 +25,8 @@ interface JobCardProps {
   onRefresh?: () => void;
 }
 
+const createApplicationId = () => `app-${crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`}`;
+
 export const JobCard: React.FC<JobCardProps> = ({ job, onRefresh }) => {
   const { user, studentProfile } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,7 +48,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onRefresh }) => {
     setApplying(true);
     try {
       db.createApplication({
-        id: `app-${Date.now()}`,
+        id: createApplicationId(),
         jobId: job.id,
         studentId: studentProfile.userId,
         studentName: studentProfile.fullName,
@@ -65,12 +67,15 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onRefresh }) => {
         origin: { y: 0.7 },
       });
       if (onRefresh) onRefresh();
-    } catch (err: any) {
-      alert(err.message || 'Error applying');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Error applying';
+      alert(message);
     } finally {
       setApplying(false);
     }
   };
+
+  const canApply = readinessPreview === null ? true : readinessPreview >= 70;
 
   const getReadinessColor = (score: number) => {
     if (score >= 80) return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
@@ -193,7 +198,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onRefresh }) => {
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   Applied
                 </span>
-              ) : (
+              ) : canApply ? (
                 <button
                   onClick={handleQuickApply}
                   disabled={applying}
@@ -202,6 +207,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onRefresh }) => {
                   <Send className="w-3 h-3" />
                   <span>{applying ? 'Applying...' : 'Quick Apply'}</span>
                 </button>
+              ) : (
+                <span className="px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/20 text-xs font-semibold flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  Improve Skills
+                </span>
               )
             )}
 

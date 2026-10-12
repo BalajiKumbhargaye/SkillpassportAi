@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/db';
-import { JobOpening, JobApplication } from '@/types';
+import { JobApplication } from '@/types';
 import { CreateJobModal } from '@/components/CreateJobModal';
 import {
   Building2,
@@ -12,21 +11,17 @@ import {
   Calendar,
   Plus,
   Search,
-  Filter,
-  CheckCircle2,
-  Clock,
   Trash2,
   IndianRupee,
   MapPin,
-  Sparkles,
   Award,
-  ExternalLink,
 } from 'lucide-react';
 
 export default function RecruiterDashboardPage() {
-  const { user } = useAuth();
-  const [jobs, setJobs] = useState<JobOpening[]>([]);
-  const [applications, setApplications] = useState<JobApplication[]>([]);
+  const [, setRefreshTick] = useState(0);
+  const jobs = db.getJobs();
+  const applications = db.getApplications();
+  const handleRefresh = () => setRefreshTick((tick) => tick + 1);
   const [selectedJobId, setSelectedJobId] = useState<string>('all');
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,20 +29,18 @@ export default function RecruiterDashboardPage() {
   const [feedbackInput, setFeedbackInput] = useState('');
   const [interviewDateInput, setInterviewDateInput] = useState('');
 
-  const loadData = () => {
-    setJobs(db.getJobs());
-    setApplications(db.getApplications());
-  };
-
   useEffect(() => {
-    loadData();
-    window.addEventListener('skillpassport_data_updated', loadData);
-    return () => window.removeEventListener('skillpassport_data_updated', loadData);
+    const handleDataUpdated = () => {
+      setRefreshTick((tick) => tick + 1);
+    };
+
+    window.addEventListener('skillpassport_data_updated', handleDataUpdated);
+    return () => window.removeEventListener('skillpassport_data_updated', handleDataUpdated);
   }, []);
 
   const handleStatusChange = (appId: string, newStatus: JobApplication['status']) => {
     db.updateApplicationStatus(appId, newStatus);
-    loadData();
+    setRefreshTick((tick) => tick + 1);
   };
 
   const handleSaveInterviewSchedule = (appId: string) => {
@@ -60,13 +53,13 @@ export default function RecruiterDashboardPage() {
     setEditingAppId(null);
     setFeedbackInput('');
     setInterviewDateInput('');
-    loadData();
+    setRefreshTick((tick) => tick + 1);
   };
 
   const handleDeleteJob = (jobId: string) => {
     if (confirm('Are you sure you want to remove this job opening?')) {
       db.deleteJob(jobId);
-      loadData();
+      setRefreshTick((tick) => tick + 1);
     }
   };
 
@@ -419,7 +412,7 @@ export default function RecruiterDashboardPage() {
       <CreateJobModal
         isOpen={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onCreated={loadData}
+        onCreated={handleRefresh}
       />
     </div>
   );

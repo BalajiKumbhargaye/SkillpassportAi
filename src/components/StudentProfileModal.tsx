@@ -13,7 +13,6 @@ import {
   Plus,
   Trash2,
   Save,
-  CheckCircle2,
 } from 'lucide-react';
 
 interface StudentProfileModalProps {
