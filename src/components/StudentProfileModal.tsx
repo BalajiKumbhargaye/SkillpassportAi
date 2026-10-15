@@ -147,37 +147,37 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col text-slate-900">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <div className="p-2 rounded-xl bg-indigo-50 text-[#6366F1] border border-indigo-100">
               <User className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Edit Student Skill Passport</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-lg font-bold text-[#312E81]">Edit Student Skill Passport</h3>
+              <p className="text-xs text-slate-500">
                 Update your academic profile and verified skill stack to refresh match scores.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Headers */}
-        <div className="flex border-b border-slate-800 px-6 bg-slate-950/40 space-x-4">
+        <div className="flex border-b border-slate-200 px-6 bg-slate-50/50 space-x-4">
           <button
             onClick={() => setActiveTab('basics')}
             className={`py-3 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-colors ${
               activeTab === 'basics'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#6366F1] text-[#312E81] font-bold'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <GraduationCap className="w-4 h-4" />
@@ -187,8 +187,8 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             onClick={() => setActiveTab('skills')}
             className={`py-3 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-colors ${
               activeTab === 'skills'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#6366F1] text-[#312E81] font-bold'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Code2 className="w-4 h-4" />
@@ -198,8 +198,8 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             onClick={() => setActiveTab('projects')}
             className={`py-3 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-colors ${
               activeTab === 'projects'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#6366F1] text-[#312E81] font-bold'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <FolderGit2 className="w-4 h-4" />
@@ -209,8 +209,8 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             onClick={() => setActiveTab('certifications')}
             className={`py-3 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-colors ${
               activeTab === 'certifications'
-                ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-[#6366F1] text-[#312E81] font-bold'
+                : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
             <Award className="w-4 h-4" />
@@ -225,32 +225,32 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Full Name</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Full Name</label>
                   <input
                     type="text"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">College / University</label>
+                  <label className="block text-slate-700 font-semibold mb-1">College / University</label>
                   <input
                     type="text"
                     value={formData.collegeName}
                     onChange={(e) => setFormData({ ...formData, collegeName: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Department</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Department</label>
                   <select
                     value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-[#6366F1] shadow-xs font-medium"
                   >
                     <option value="Computer Science">Computer Science</option>
                     <option value="Information Technology">Information Technology</option>
@@ -261,7 +261,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Current CGPA (out of 10)</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Current CGPA (out of 10)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -269,28 +269,28 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     max="10"
                     value={formData.cgpa}
                     onChange={(e) => setFormData({ ...formData, cgpa: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">Graduation Year</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Graduation Year</label>
                   <input
                     type="number"
                     value={formData.graduationYear}
                     onChange={(e) => setFormData({ ...formData, graduationYear: parseInt(e.target.value) || 2026 })}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">Bio / Professional Headline</label>
+                <label className="block text-slate-700 font-semibold mb-1">Bio / Professional Headline</label>
                 <textarea
                   rows={3}
                   value={formData.bio || ''}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   placeholder="Share a short summary of your technical interests..."
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                 />
               </div>
             </div>
@@ -300,20 +300,20 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           {activeTab === 'skills' && (
             <div className="space-y-4">
               {/* Add Skill Form */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                <p className="text-xs font-semibold text-slate-300">Add New Skill to Passport</p>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+                <p className="text-xs font-semibold text-slate-700">Add New Skill to Passport</p>
                 <div className="flex flex-wrap sm:flex-nowrap gap-2">
                   <input
                     type="text"
                     placeholder="e.g. Docker, TypeScript, PyTorch, GraphQL..."
                     value={newSkillName}
                     onChange={(e) => setNewSkillName(e.target.value)}
-                    className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="flex-1 px-3 py-2 text-xs rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                   <select
                     value={newSkillLevel}
                     onChange={(e) => setNewSkillLevel(e.target.value as SkillLevel)}
-                    className="px-3 py-2 text-xs rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="px-3 py-2 text-xs rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-[#6366F1] shadow-xs font-medium"
                   >
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
@@ -322,7 +322,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                   </select>
                   <button
                     onClick={handleAddSkill}
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0"
+                    className="px-4 py-2 rounded-xl bg-[#6366F1] hover:bg-[#4F46E5] text-white text-xs font-bold flex items-center gap-1.5 transition-colors shrink-0 shadow-xs shadow-indigo-500/20"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add</span>
@@ -332,24 +332,24 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
 
               {/* Current Skills List */}
               <div className="space-y-2">
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Verified Skills in Passport ({formData.skills.length})
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {formData.skills.map((skill) => (
                     <div
                       key={skill.name}
-                      className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-between text-xs"
+                      className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs"
                     >
                       <div>
-                        <span className="font-semibold text-white">{skill.name}</span>
-                        <span className="ml-2 text-[10px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                        <span className="font-semibold text-slate-800">{skill.name}</span>
+                        <span className="ml-2 text-[10px] px-2 py-0.5 rounded bg-indigo-50 text-[#6366F1] border border-indigo-100 font-semibold">
                           {skill.level}
                         </span>
                       </div>
                       <button
                         onClick={() => handleRemoveSkill(skill.name)}
-                        className="text-slate-500 hover:text-rose-400 transition-colors p-1"
+                        className="text-slate-400 hover:text-rose-600 transition-colors p-1"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -364,15 +364,15 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           {activeTab === 'projects' && (
             <div className="space-y-4">
               {/* Add Project Form */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
-                <p className="font-semibold text-slate-300">Add Technical Project</p>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+                <p className="font-semibold text-slate-700">Add Technical Project</p>
                 <div>
                   <input
                     type="text"
                     placeholder="Project Title (e.g. Distributed Cache Engine)"
                     value={newProjectTitle}
                     onChange={(e) => setNewProjectTitle(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
                 <div>
@@ -381,7 +381,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     placeholder="Short description of technical architecture & impact..."
                     value={newProjectDesc}
                     onChange={(e) => setNewProjectDesc(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
                 <div className="flex gap-2">
@@ -390,11 +390,11 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     placeholder="Technologies comma separated (e.g. Go, Redis, Docker)"
                     value={newProjectTechs}
                     onChange={(e) => setNewProjectTechs(e.target.value)}
-                    className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="flex-1 px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                   <button
                     onClick={handleAddProject}
-                    className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1.5 transition-colors shrink-0"
+                    className="px-4 py-2 rounded-xl bg-[#6366F1] hover:bg-[#4F46E5] text-white font-bold flex items-center gap-1.5 transition-colors shrink-0 shadow-xs shadow-indigo-500/20"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Add Project</span>
@@ -407,16 +407,16 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                 {formData.projects.map((proj) => (
                   <div
                     key={proj.id}
-                    className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs flex items-start justify-between gap-3"
+                    className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-start justify-between gap-3"
                   >
                     <div>
-                      <h5 className="font-bold text-white">{proj.title}</h5>
-                      <p className="text-slate-400 mt-0.5">{proj.description}</p>
+                      <h5 className="font-bold text-[#312E81]">{proj.title}</h5>
+                      <p className="text-slate-600 mt-0.5">{proj.description}</p>
                       <div className="mt-2 flex flex-wrap gap-1">
                         {proj.technologies.map((t, idx) => (
                           <span
                             key={idx}
-                            className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300"
+                            className="text-[10px] px-2 py-0.5 rounded bg-white border border-slate-200 text-slate-600 font-medium"
                           >
                             {t}
                           </span>
@@ -425,7 +425,7 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
                     </div>
                     <button
                       onClick={() => handleRemoveProject(proj.id)}
-                      className="text-slate-500 hover:text-rose-400 p-1"
+                      className="text-slate-400 hover:text-rose-600 p-1"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -438,46 +438,49 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
           {/* CERTIFICATIONS */}
           {activeTab === 'certifications' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
-                <p className="font-semibold text-slate-300">Add Industry Certification</p>
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+                <p className="font-semibold text-slate-700">Add Industry Certification</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <input
                     type="text"
                     placeholder="Certificate Title (e.g. AWS Certified Solutions Architect)"
                     value={newCertTitle}
                     onChange={(e) => setNewCertTitle(e.target.value)}
-                    className="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                   <input
                     type="text"
-                    placeholder="Issuer (e.g. Amazon Web Services, Google Cloud)"
+                    placeholder="Issuing Authority (e.g. Amazon Web Services)"
                     value={newCertIssuer}
                     onChange={(e) => setNewCertIssuer(e.target.value)}
-                    className="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:border-blue-500"
+                    className="px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
                   />
                 </div>
-                <button
-                  onClick={handleAddCert}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold flex items-center gap-1.5 transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Add Certification</span>
-                </button>
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleAddCert}
+                    className="px-4 py-2 rounded-xl bg-[#6366F1] hover:bg-[#4F46E5] text-white font-bold flex items-center gap-1.5 transition-colors shadow-xs shadow-indigo-500/20"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add Certificate</span>
+                  </button>
+                </div>
               </div>
 
+              {/* Existing Certifications */}
               <div className="space-y-2">
-                {formData.certifications.map((c) => (
+                {formData.certifications.map((cert) => (
                   <div
-                    key={c.id}
-                    className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs flex items-center justify-between"
+                    key={cert.id}
+                    className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between"
                   >
                     <div>
-                      <h5 className="font-bold text-white">{c.title}</h5>
-                      <p className="text-slate-400 text-[11px]">{c.issuer} • Issued {c.issueDate}</p>
+                      <h5 className="font-bold text-[#312E81]">{cert.title}</h5>
+                      <p className="text-[11px] text-slate-500">Issued by {cert.issuer}</p>
                     </div>
                     <button
-                      onClick={() => handleRemoveCert(c.id)}
-                      className="text-slate-500 hover:text-rose-400 p-1"
+                      onClick={() => handleRemoveCert(cert.id)}
+                      className="text-slate-400 hover:text-rose-600 p-1"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -489,19 +492,19 @@ export const StudentProfileModal: React.FC<StudentProfileModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="px-4 py-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors font-medium text-xs"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/30 flex items-center gap-1.5 transition-all"
+            className="px-5 py-2.5 rounded-xl bg-[#6366F1] hover:bg-[#4F46E5] text-white font-bold text-xs shadow-xs shadow-indigo-500/20 flex items-center gap-1.5 transition-all"
           >
             <Save className="w-4 h-4" />
-            <span>Save Skill Passport</span>
+            <span>Save & Update Passport</span>
           </button>
         </div>
       </div>

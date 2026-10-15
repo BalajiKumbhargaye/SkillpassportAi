@@ -69,24 +69,24 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden my-6 max-h-[90vh] flex flex-col text-slate-900">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="p-2 rounded-xl bg-indigo-50 text-[#6366F1] border border-indigo-100">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Publish Training Program</h3>
-              <p className="text-xs text-slate-400">
+              <h3 className="text-lg font-bold text-[#312E81]">Publish Training Program</h3>
+              <p className="text-xs text-slate-500">
                 Map courses to specific high-demand skills to bridge student gaps.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -96,55 +96,55 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Course Title *</label>
+              <label className="block text-slate-700 font-semibold mb-1">Course Title *</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Production Microservices with Go"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Provider / Institute Name *</label>
+              <label className="block text-slate-700 font-semibold mb-1">Provider / Institute Name *</label>
               <input
                 type="text"
                 required
                 value={providerName}
                 onChange={(e) => setProviderName(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Fee (₹, 0 for Free)</label>
+              <label className="block text-slate-700 font-semibold mb-1">Fee (₹, 0 for Free)</label>
               <input
                 type="number"
                 min="0"
                 value={fee}
                 onChange={(e) => setFee(parseFloat(e.target.value) || 0)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Duration (Weeks)</label>
+              <label className="block text-slate-700 font-semibold mb-1">Duration (Weeks)</label>
               <input
                 type="number"
                 min="1"
                 value={durationWeeks}
                 onChange={(e) => setDurationWeeks(parseInt(e.target.value) || 1)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Difficulty Level</label>
+              <label className="block text-slate-700 font-semibold mb-1">Difficulty Level</label>
               <select
                 value={level}
                 onChange={(e) => setLevel(e.target.value as Course['level'])}
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-800 focus:outline-none focus:border-[#6366F1] shadow-xs font-medium"
               >
                 <option value="Beginner">Beginner</option>
                 <option value="Intermediate">Intermediate</option>
@@ -154,73 +154,72 @@ export const CreateCourseModal: React.FC<CreateCourseModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">
+            <label className="block text-slate-700 font-semibold mb-1">
               Skills Covered (Comma separated) *
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Docker, Kubernetes, Linux, AWS, Git"
+              placeholder="e.g. Docker, Kubernetes, CI/CD, Helm"
               value={skillsCovered}
               onChange={(e) => setSkillsCovered(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
-              These skills will automatically link to student skill-gap recommendations.
-            </p>
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Target Job Roles</label>
+            <label className="block text-slate-700 font-semibold mb-1">
+              Target Job Roles (Comma separated)
+            </label>
             <input
               type="text"
               value={targetJobRoles}
               onChange={(e) => setTargetJobRoles(e.target.value)}
-              placeholder="e.g. Cloud DevOps Engineer, Full Stack Developer"
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+              placeholder="e.g. DevOps Engineer, Cloud SRE, Platform Specialist"
+              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
             />
           </div>
 
           <div>
-            <label className="block text-slate-300 font-semibold mb-1">Course Description *</label>
+            <label className="block text-slate-700 font-semibold mb-1">Curriculum Summary *</label>
             <textarea
               rows={3}
               required
-              placeholder="What hands-on skills, assignments, and outcomes are covered..."
+              placeholder="Comprehensive syllabus overview, hands-on lab details, capstone project..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white focus:outline-none focus:border-amber-500"
+              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#6366F1] shadow-xs"
             />
           </div>
 
-          <div className="flex items-center gap-3 pt-1">
+          <div className="flex items-center gap-2">
             <input
               type="checkbox"
-              id="certified"
+              id="isCertified"
               checked={isCertified}
               onChange={(e) => setIsCertified(e.target.checked)}
-              className="rounded bg-slate-950 border-slate-800 text-amber-500 focus:ring-0"
+              className="rounded bg-white border-slate-300 text-[#6366F1] focus:ring-0"
             />
-            <label htmlFor="certified" className="text-slate-300 font-medium cursor-pointer">
-              Includes Verified Completion Certificate
+            <label htmlFor="isCertified" className="text-slate-700 font-medium cursor-pointer">
+              Includes Verified Digital Certificate of Completion
             </label>
           </div>
 
-          {/* Footer inside form */}
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+          {/* Footer */}
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="px-4 py-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-600/30 flex items-center gap-1.5 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-[#6366F1] hover:bg-[#4F46E5] text-white font-bold shadow-xs shadow-indigo-500/20 flex items-center gap-1.5 transition-all"
             >
               <Plus className="w-4 h-4" />
-              <span>Publish Course</span>
+              <span>Publish Program</span>
             </button>
           </div>
         </form>

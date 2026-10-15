@@ -18,14 +18,30 @@ export const metadata: Metadata = {
   description: "AI-powered student skill passport and campus placement platform",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+import { Suspense } from "react";
+import { Navbar } from "@/components/Navbar";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
-        <AuthProvider>{children}</AuthProvider>
+      <body className="min-h-full flex flex-col bg-[#F8FAFC] text-[#0F172A] font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900">
+        <AuthProvider>
+          <Suspense fallback={<div className="h-16 bg-white border-b border-slate-200" />}>
+            <Navbar />
+          </Suspense>
+          <div className="flex-1">
+            <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-12 text-center text-slate-400 text-xs font-medium">Loading SkillPassport...</div>}>
+              {children}
+            </Suspense>
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
